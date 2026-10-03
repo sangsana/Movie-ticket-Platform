@@ -1,0 +1,47 @@
+services:
+  postgres-service:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: movie_booking
+      POSTGRES_USER: movie_user
+      POSTGRES_PASSWORD: movie_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  backend-service:
+    build:
+      context: ./backend
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      CORS_ORIGIN: '*'
+      DB_HOST: postgres-service
+      DB_PORT: 5432
+      DB_NAME: movie_booking
+      DB_USER: movie_user
+      DB_PASSWORD: movie_password
+      DB_SSL: 'false'
+    depends_on:
+      postgres-service:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend-service
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
