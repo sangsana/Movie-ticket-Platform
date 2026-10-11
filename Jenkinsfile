@@ -99,9 +99,10 @@ pipeline {
                                     echo "No changes to commit"
                                 }
    
+                            }
                         }
-                    }
-                }    
+                    }    
+                }
             }
         }
     }
