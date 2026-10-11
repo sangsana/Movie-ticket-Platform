@@ -88,29 +88,17 @@ pipeline {
                             ) != 0) {
                                 sh "git commit -m 'Update image tags to build ${BUILD_NUMBER}'"
 
-                                
                                 withCredentials([
-                                    string(credentialsId: 'GitHub Creds', variable: 'GITHUB_PAT')
+                                    gitUsernamePassword(
+                                        credentialsId: 'github-push-creds',
+                                        gitToolName: 'Default'
+                                    )
                                 ]) {
-                                    sh '''
-                                        set +x
-                                        git push "https://x-access-token:${GITHUB_PAT}@github.com/sangsana/Movie-ticket-Platform-k8s.git" HEAD:main
-                                     '''
+                                    sh 'git push origin HEAD:main'
+                                } else {
+                                    echo "No changes to commit"
                                 }
-
-
-                                //withCredentials([string(credentialsId: 'GitHub Creds', variable: '')]) {
-                                 //   sh 'git push origin HEAD:main'    
-                               // }
-                            }
-                        
-                            //if ! git diff --cached --quiet; then
-                            //    git commit -m "Update image tags to build ${BUILD_NUMBER}"
-                            //    git push origin HEAD:main
-                          //  else
-                          //      echo "No changes to commit."
-                         //   fi
-                        
+   
                         }
                     }
                 }    
