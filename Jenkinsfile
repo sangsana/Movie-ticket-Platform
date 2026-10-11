@@ -77,9 +77,9 @@ pipeline {
                         sh '''
                             set -e
 
-                            sed -i '/name: sangsana\\/movieapp-frontend/{n;s/newTag:.*/newTag: "'${BUILD_NUMBER}'/;}' kustomization.yaml
+                            sed -i '/name: sangsana\\/movieapp-frontend/{n;s/newTag:.*/newTag: "'${BUILD_NUMBER}'"/;}' kustomization.yaml
 
-                            sed -i '/name: sangsana\\/movieapp-backend/{n;s/newTag:.*/newTag: "'${BUILD_NUMBER}'/;}' kustomization.yaml
+                            sed -i '/name: sangsana\\/movieapp-backend/{n;s/newTag:.*/newTag: "'${BUILD_NUMBER}'"/;}' kustomization.yaml
 
                             echo "Updated image tags:"
                             cat kustomization.yaml
