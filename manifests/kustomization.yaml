@@ -13,3 +13,9 @@ resources:
   - frontend-deployment.yaml
   - ingress.yaml
   - network-policies.yaml
+
+images:
+  - name: sangsana/movieapp-frontend
+    newTag: "22"
+  - name: sangsana/movieapp-backend
+    newTag: "22"
