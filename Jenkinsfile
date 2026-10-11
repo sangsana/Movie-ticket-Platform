@@ -95,11 +95,12 @@ pipeline {
                                     )
                                 ]) {
                                     sh 'git push origin HEAD:main'
-                                } else {
-                                    echo "No changes to commit"
-                                }
+                                } 
+                            else 
+                                echo "No changes to commit"
+                            fi
    
-                            }
+                            
                         }
                     }    
                 }
