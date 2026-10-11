@@ -84,7 +84,7 @@ pipeline {
                             if ! git diff --cached --quiet; then
                                 git commit -m "Update image tags to build ${BUILD_NUMBER}"
                                 script{
-                                    withCredentials([string(credentialsId: 'GitHub Creds', variable: '')]) {
+                                    withCredentials(credentialsId: 'GitHub Creds', variable: '') {
                                         sh 'git push origin HEAD:main'
                                     }
                                 }
