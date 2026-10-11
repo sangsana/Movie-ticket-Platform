@@ -58,5 +58,39 @@ pipeline {
                 }
             }
         }
+        stage('Update K8s Manifest') {
+            steps {
+                dir('gitops') {
+                    git branch: 'main',
+                        credentialsId: 'GitHub Creds',
+                        url: 'https://github.com/sangsana/Movie-ticket-Platform-k8s.git'
+
+                    dir('manifests') {
+                        sh '''
+                            set -e
+
+                            sed -i '/name: sangsana\\/movieapp-frontend/{n;s/newTag:.*/newTag: '"${BUILD_NUMBER}"'/;}' kustomization.yaml
+
+                            sed -i '/name: sangsana\\/movieapp-backend/{n;s/newTag:.*/newTag: '"${BUILD_NUMBER}"'/;}' kustomization.yaml
+
+                            echo "Updated image tags:"
+                            cat kustomization.yaml
+
+                            git config user.name "Jenkins"
+                            git config user.email "jenkins@example.com"
+
+                            git add kustomization.yaml
+
+                            if ! git diff --cached --quiet; then
+                                git commit -m "Update image tags to build ${BUILD_NUMBER}"
+                                git push origin HEAD:main
+                            else
+                                echo "No changes to commit."
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
