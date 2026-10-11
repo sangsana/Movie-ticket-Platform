@@ -84,7 +84,7 @@ pipeline {
                             if ! git diff --cached --quiet; then
                                 git commit -m "Update image tags to build ${BUILD_NUMBER}"
                                 withCredentials([string(credentialsId: 'GitHub Creds', variable: '')]) {
-                                    git push origin HEAD:main
+                                    sh 'git push origin HEAD:main'
                                 }  
                             else
                                 echo "No changes to commit."
