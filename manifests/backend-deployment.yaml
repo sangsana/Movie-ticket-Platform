@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: YOUR_AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/movie-ticket-backend:1.0.0
+          image: sangsana/movieapp-backend
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4000
