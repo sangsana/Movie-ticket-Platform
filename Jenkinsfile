@@ -80,16 +80,29 @@ pipeline {
                             git config user.email "jenkins@example.com"
 
                             git add kustomization.yaml
-
-                            if ! git diff --cached --quiet; then
-                                git commit -m "Update image tags to build ${BUILD_NUMBER}"
-                                git push origin HEAD:main
-                            else
-                                echo "No changes to commit."
-                            fi
                         '''
+                        script {
+                            if (sh(
+                                script: 'git diff --cached --quiet',
+                                returnStatus: true
+                            ) != 0) {
+                                sh "git commit -m 'Update image tags to build ${BUILD_NUMBER}'"
+
+                                withCredentials([string(credentialsId: 'GitHub Creds', variable: '')]) {
+                                    sh 'git push origin HEAD:main'    
+                                }
+                            }
+                        
+                            //if ! git diff --cached --quiet; then
+                            //    git commit -m "Update image tags to build ${BUILD_NUMBER}"
+                            //    git push origin HEAD:main
+                          //  else
+                          //      echo "No changes to commit."
+                         //   fi
+                        
+                        }
                     }
-                }
+                }    
             }
         }
     }
