@@ -83,9 +83,9 @@ pipeline {
 
                             if ! git diff --cached --quiet; then
                                 git commit -m "Update image tags to build ${BUILD_NUMBER}"
-                                withCredentials([gitUsernamePassword(credentialsId: 'DockerHub Creds', gitToolName: 'Default')]) {
+                                withCredentials([string(credentialsId: 'GitHub Creds', variable: '')]) {
                                     git push origin HEAD:main
-                                }   
+                                }  
                             else
                                 echo "No changes to commit."
                             fi
