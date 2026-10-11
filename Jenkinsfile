@@ -19,16 +19,16 @@ pipeline {
         }
         stage('Image Build'){
             steps{
-                sh 'docker build -t sangsana/movieapp:frontend frontend'
-                sh 'docker build -t sangsana/movieapp:backend backend'
+                sh 'docker build -t sangsana/movieapp-frontend:${BUILD_NUMBER} frontend'
+                sh 'docker build -t sangsana/movieapp-backend:${BUILD_NUMBER} backend'
             }
         }
         stage('Trivy Scan') {
             steps {
                 sh  '''
                     mkdir -p $WORKSPACE/trivy-reports
-                    trivy image --format table -o $WORKSPACE/trivy-reports/frontend.txt sangsana/movieapp:frontend
-                    trivy image --format table -o $WORKSPACE/trivy-reports/backend.txt sangsana/movieapp:backend
+                    trivy image --format table -o $WORKSPACE/trivy-reports/frontend.txt sangsana/movieapp-frontend:${BUILD_NUMBER}
+                    trivy image --format table -o $WORKSPACE/trivy-reports/backend.txt sangsana/movieapp-backend:${BUILD_NUMBER}
                     '''
                 archiveArtifacts artifacts: 'trivy-reports/*.txt', fingerprint: true
                 publishHTML(target: [
@@ -52,8 +52,8 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'DockerHub Creds') {
-                        sh 'docker push sangsana/movieapp:frontend'
-                        sh 'docker push sangsana/movieapp:backend'
+                        sh 'docker push sangsana/movieapp-frontend:${BUILD_NUMBER}'
+                        sh 'docker push sangsana/movieapp-backend:${BUILD_NUMBER}'
                     }        
                 }
             }
