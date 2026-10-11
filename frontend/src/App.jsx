@@ -129,7 +129,7 @@ function App() {
               <p className="eyebrow">NOW SHOWING</p>
               <h1>Find a movie. Pick your seats. Enjoy the show.</h1>
               <p className="hero-copy">
-                A full-stack movie booking demo designed for a three-tier Kubernetes deployment.
+                A full-stack movie booking demo designed by Sandeep Sangepollu.
               </p>
             </div>
             <div className="hero-stat">
